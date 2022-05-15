@@ -5,42 +5,108 @@
     <title>Title</title>
     <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css"/>
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-            crossorigin="anonymous"></script>
-    <py-env>
-        - paths:
-            - /main.py
-    </py-env>
-
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
 </head>
 <body>
 
+<style>
+.myDiv {
+  width: 66%;
+  margin: 0 auto;
+}
+</style>
+
+
 <py-script>
-    from main import generate_phonetic_alphabet
-    def convert(*args):
-        sentence = document.getElementById("sentence").value
-        language = document.getElementById("language").value
-        result = generate_phonetic_alphabet(sentence, language)
-        pyscript.write("phonetic", result)
+
+    alphabets = {
+    "ger": {
+        "A": "Anton",
+        "Ä": "Ärger",
+        "B": "Berta",
+        "C": "Cäsar",
+        "D": "Dora",
+        "E": "Emil",
+        "F": "Friedrich",
+        "G": "Gustav",
+        "H": "Heinrich",
+        "I": "Ida",
+        "J": "Julius",
+        "K": "Konrad",
+        "L": "Ludwig",
+        "M": "Martha",
+        "N": "Nordpol",
+        "O": "Otto",
+        "Ö": "Österreich",
+        "P": "Paula",
+        "Q": "Quelle",
+        "R": "Richard",
+        "S": "Siegfried",
+        "ß": "scharfes S",
+        "T": "Theodor",
+        "U": "Ulrich",
+        "Ü": "Übel",
+        "V": "Viktor",
+        "W": "Wilhelm",
+        "X": "Xaver",
+        "Y": "Ypsilon",
+        "Z": "Zeppelin"
+    }
+}
+
+
+def read_sentence():
+    sentence_input = input("Please type the word: ")
+    language_input = input("Please specify the language: ") or "ger"
+    return sentence_input, language_input
+
+
+def generate_phonetic_alphabet(sentence_input: str, language_input: str):
+    result = ""
+    data = alphabets[language_input]
+    words = sentence_input.split(" ")
+    for word in words:
+        result += f"{word}:\t "
+        for character in word:
+            if character.upper() in data.keys():
+                result += data[character.upper()] + " "
+        result += "\n"
+    return result
+
+def convert(*args):
+    sentence = document.getElementById("sentence").value
+    language = document.getElementById("language").value
+    result = generate_phonetic_alphabet(sentence, language)
+    pyscript.write("phonetic", result)
+
 </py-script>
 
-<div id="form">
+
+<div id="form" class="myDiv">
     <form>
-        <label for="sentence">Sentence:</label>
-        <input type="text" id="sentence" name="sentence">
-        <br>
-        <label for="language">Language:</label>
-        <select name="language" id="language">
-            <option value="ger">German</option>
-        </select>
-        <br>
+        <div  class="grid">
+            <div>
+                <label for="sentence">
+                    Sentence
+                    <input type="text" id="sentence" name="sentence" placeholder="lorem ipsum">
+                </label>
+           </div>
+            <div>
+                <label for="language">
+                    Language
+                <select name="language" id="language">
+                    <option value="ger">German</option>
+                </select>
+                </label>
+            </div>
+        </div>
         <input type="button" value="Submit" id="submit" pys-onClick="convert">
     </form>
 </div>
 
 <label for="phonetic"></label>
-<textarea id="phonetic"></textarea>
+<textarea id="phonetic" rows="10"></textarea>
 
 
 </body>
