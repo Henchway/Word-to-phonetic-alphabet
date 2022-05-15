@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css"/>
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+        - json
+        - paths:
+            - main.py
+    </py-env>
+
+</head>
+<body>
+
+<py-script>
+    from main import generate_phonetic_alphabet
+
+    def convert():
+        sentence = document.getElementById("sentence").value
+        language = document.getElementById("language").value
+        result = generate_phonetic_alphabet(sentence, language)
+        pyscript.write("phonetic", result)
+
+</py-script>
+
+<form>
+    <label for="sentence">Sentence:</label>
+    <input type="text" id="sentence" name="sentence">
+    <br>
+    <label for="language">Language:</label>
+    <select name="language" id="language">
+        <option value="ger">German</option>
+    </select>
+    <br>
+    <input type="submit" value="Submit" pys-onClick="convert">
+</form>
+
+<label for="phonetic"></label>
+<textarea id="phonetic"></textarea>
+
+
+</body>
+</html>
